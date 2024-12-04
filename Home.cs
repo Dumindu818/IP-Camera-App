@@ -209,23 +209,23 @@ namespace IP_Camera_App
                 return;
             }
 
-            // Generate a unique filename based on the current date, time, and sequence number
             string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-            string sequenceNumber = (++recordingCount).ToString("D3"); // Format as a 3-digit number
+            string sequenceNumber = (++recordingCount).ToString("D3");
             string filename = $"recording_{timestamp}_{sequenceNumber}.avi";
 
-            
-            
-            // Get the path to the user's Downloads folder
             string downloadsFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
-
             outputPath = Path.Combine(downloadsFolder, filename);
 
+            // Adjust the dimensions to be multiples of 2
+            int width = pictureBox.Width - (pictureBox.Width % 2);
+            int height = pictureBox.Height - (pictureBox.Height % 2);
+
             videoWriter = new VideoFileWriter();
-            videoWriter.Open(outputPath, pictureBox.Width, pictureBox.Height, 25, VideoCodec.MPEG4, 1000000);
-            MessageBox.Show("Recording is Started");
+            videoWriter.Open(outputPath, width, height, 25, VideoCodec.MPEG4, 1000000);
+            MessageBox.Show("Recording has started.");
             isRecording = true;
         }
+
 
         private void btnStopRecording_Click(object sender, EventArgs e)
         {
